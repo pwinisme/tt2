@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>CinemaMod YouTube Player</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            overflow: hidden;
+        }
+        #player {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div id="player"></div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script>
+        var player;
+        var currentVideoId = '';
+        var isPlayerReady = false;
+
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('player', {
+                height: '100%',
+                width: '100%',
+                videoId: '',
+                playerVars: {
+                    'autoplay': 1,
+                    'controls': 0, 
+                    'rel': 0,
+                    'showinfo': 0,
+                    'modestbranding': 1,
+                    'iv_load_policy': 3
+                },
+                events: {
+                    'onReady': onPlayerReady
+                }
+            });
+        }
+
+        function onPlayerReady(event) {
+            isPlayerReady = true;
+        }
+
+        function th_video(videoId, autoplay) {
+            currentVideoId = videoId;
+            if (isPlayerReady && player && player.loadVideoById) {
+                player.loadVideoById({
+                    videoId: videoId
+                });
+            } else {
+                setTimeout(function() { th_video(videoId, autoplay); }, 500);
+            }
+        }
+
+        function th_seek(seconds) {
+            if (isPlayerReady && player && player.seekTo) {
+                player.seekTo(seconds, true);
+            }
+        }
+
+        function th_volume(volume) {
+            if (isPlayerReady && player && player.setVolume) {
+                player.setVolume(volume);
+            }
+        }
+    </script>
+</body>
+</html>
